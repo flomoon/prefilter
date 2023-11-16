@@ -1,0 +1,26 @@
+# Written by Seongmoon Jeong - 2022.04.29
+
+version: "3.9"
+
+services:
+  main:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${USER}/surrogate:v1
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    shm_size: 256gb
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    volumes:
+      - ${HOME}/container_root/:/root/
+      - ./:/surrogate
+      - ./data/:/data/
+      - /data4/:/data4/ # for symbolic links.
+    tty: true
+    container_name: ${USER}-vcm-surrogate
